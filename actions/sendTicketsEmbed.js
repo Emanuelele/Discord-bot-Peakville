@@ -18,7 +18,7 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setColor(0xf9f4d8)
                 .setTitle('Tickets')
-                .setDescription('Clicca su dei pulsanti qui sotto per aprire un ticket.')
+                .setDescription('Clicca su uno dei pulsanti qui sotto per aprire un ticket e ricevere supporto.')
                 .setThumbnail('https://cdn.peakville.it/static/general/LogoOverlay.webp')
                 .setTimestamp()
                 .setFooter({ text: 'Staff di Peakville', iconURL: 'https://cdn.peakville.it/static/general/logo.png' });
@@ -34,7 +34,15 @@ module.exports = {
                 new ButtonBuilder()
                     .setCustomId('perma_ticket')
                     .setLabel('Permadeath')
-                    .setStyle(ButtonStyle.Danger)
+                    .setStyle(ButtonStyle.Danger),
+                new ButtonBuilder()
+                    .setCustomId('purchase_ticket')
+                    .setLabel('Donazioni')
+                    .setStyle(ButtonStyle.Success),
+                new ButtonBuilder()
+                    .setCustomId('activity_ticket')
+                    .setLabel('Attività')
+                    .setStyle(ButtonStyle.Primary)
             ]
             const row = new ActionRowBuilder().addComponents(components);
 
