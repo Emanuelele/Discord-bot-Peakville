@@ -17,7 +17,7 @@ module.exports = {
             const member = interaction.guild.members.cache.get(interaction.user.id);
             const attempts = await getAttempts(interaction.user.id);
             if (attempts >= 3) {
-                return interaction.editReply({ content: 'Hai superato il limite di tentativi.' });
+                return interaction.editReply({ content: 'Hai superato il limite di tentativi. Potrai riprovare tra 24 ore.' });
             }
 
             if (member.roles.cache.has(process.env.VERIFY_ROLE)) {

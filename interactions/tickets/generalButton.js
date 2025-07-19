@@ -11,6 +11,12 @@ module.exports = {
         const member = interaction.member;
         const category = guild.channels.cache.get(categoryId);
         try {
+            if (!member.roles.cache.has(process.env.ALLOWLIST_ROLE)) {
+                return interaction.editReply({
+                    content: `Non hai i permessi per aprire questo tipo di ticket.`,
+                    flags: MessageFlags.Ephemeral
+                });
+            }
             const alreadyHasTicket = await hasOpenTicket(member.id);
             if (alreadyHasTicket >= process.env.MAX_TICKETS) {
                 return interaction.editReply({

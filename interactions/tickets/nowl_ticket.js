@@ -3,33 +3,33 @@ const { createTicket, hasOpenTicket } = require('../../managers/ticketsManager')
 require('dotenv').config();
 
 module.exports = {
-    name: 'perma_ticket',
+    name: 'nowl_ticket',
     async execute(interaction, client) {
         await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-        const categoryId = process.env.TICKETS_PERMA_CATEGORY;
+        const categoryId = process.env.TICKETS_NOWL_CATEGORY;
         const guild = interaction.guild;
         const member = interaction.member;
         const category = guild.channels.cache.get(categoryId);
         try {
-            if (!member.roles.cache.has(process.env.ALLOWLIST_ROLE)) {
+            if (member.roles.cache.has(process.env.ALLOWLIST_ROLE)) {
                 return interaction.editReply({
                     content: `Non hai i permessi per aprire questo tipo di ticket.`,
                     flags: MessageFlags.Ephemeral
                 });
             }
             const alreadyHasTicket = await hasOpenTicket(member.id);
-            if (alreadyHasTicket >= process.env.MAX_TICKETS) {
+            if (alreadyHasTicket >= 1) {
                 return interaction.editReply({
                     content: `Hai già ${alreadyHasTicket} ticket aperti!`,
                     flags: MessageFlags.Ephemeral,
                 });
             }
             const channel = await guild.channels.create({
-                name: `Ticket-Perma-${interaction.user.username}`,
+                name: `Ticket-NoWl-${interaction.user.username}`,
                 type: ChannelType.GuildText,
                 topic: member.id,
                 parent: categoryId,
-                permissionOverwrites: 
+                permissionOverwrites:
                 [
                     ...category.permissionOverwrites.cache.map(overwrite => ({
                         id: overwrite.id,

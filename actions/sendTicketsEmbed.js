@@ -22,7 +22,8 @@ module.exports = {
                 .setThumbnail('https://cdn.peakville.it/static/general/LogoOverlay.webp')
                 .setTimestamp()
                 .setFooter({ text: 'Staff di Peakville', iconURL: 'https://cdn.peakville.it/static/general/logo.png' });
-            const components = [
+
+            const row1 = new ActionRowBuilder().addComponents(
                 new ButtonBuilder()
                     .setCustomId('general_ticket')
                     .setLabel('Generale')
@@ -43,13 +44,19 @@ module.exports = {
                     .setCustomId('activity_ticket')
                     .setLabel('Attività')
                     .setStyle(ButtonStyle.Primary)
-            ]
-            const row = new ActionRowBuilder().addComponents(components);
+            );
 
-            await channel.send({ embeds: [embed], components: [row] });
+            const row2 = new ActionRowBuilder().addComponents(
+                new ButtonBuilder()
+                    .setCustomId('nowl_ticket')
+                    .setLabel('Donazioni (NoWl)')
+                    .setStyle(ButtonStyle.Danger)
+            );
+
+            await channel.send({ embeds: [embed], components: [row1, row2] });
             logger.success(`Messaggio inviato con successo nel canale ${channel.name}.`);
         } catch (error) {
-            logger.error(`Errore durante l\'invio del messaggio: ${error}`);
+            logger.error(`Errore durante l'invio del messaggio: ${error}`);
         }
     }
 }
