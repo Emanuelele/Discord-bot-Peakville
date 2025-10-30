@@ -11,11 +11,7 @@ module.exports = {
     async execute(interaction, client) {
         try {
             await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-            const roleIdsToRemove = [
-                process.env.REMAND_ROLE_1,
-                process.env.REMAND_ROLE_2,
-                process.env.REMAND_ROLE_3,
-            ];
+            const roleIdsToRemove = [process.env.REMAND_ROLE, process.env.BG_DENIDED_ROLE, process.env.BG_APPROVED_ROLE];
             const guild = interaction.guild;
             if (!guild) {
                 await interaction.editReply({

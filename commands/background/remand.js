@@ -56,7 +56,7 @@ module.exports = {
         const remandCount = await getAndIncrementRemandCount(user.id);
         if(remandCount > 3) return interaction.editReply({ content: `${user.tag} ha già raggiunto il limite massimo di rimandi.`, flags: MessageFlags.Ephemeral });
 
-        const role = interaction.guild.roles.cache.get(process.env[`REMAND_ROLE_${remandCount}`]);
+        const role = interaction.guild.roles.cache.get(process.env[`REMAND_ROLE`]);
         if (role) {
             await member.roles.add(role);
         }

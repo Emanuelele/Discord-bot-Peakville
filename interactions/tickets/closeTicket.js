@@ -13,6 +13,10 @@ module.exports = {
             .join('\n');
 
         transcriptTicket(creatorId, closerId, transcript);
-        interaction.channel.delete();
+        try {
+            interaction.channel.delete();
+        } catch (error) {
+            console.error(error);
+        }
     }
 }

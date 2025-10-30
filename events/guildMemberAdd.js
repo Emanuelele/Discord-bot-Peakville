@@ -10,6 +10,14 @@ module.exports = {
                 "executor": member.user.id
             }
             await createLog("PLAYER_JOIN_DISCORD", metadata);
+
+            const accountAge = Date.now() - member.user.createdTimestamp;
+            const oneYearInMs = 365 * 24 * 60 * 60 * 1000;
+            
+            if (accountAge >= oneYearInMs) {
+                await member.roles.add('1359565375397826710');
+            }
+
             const channel = member.guild.channels.cache.get(process.env.WELCOME_CHANNEL_ID);
             if (!channel) return;
             const welcomeEmbed = new EmbedBuilder()

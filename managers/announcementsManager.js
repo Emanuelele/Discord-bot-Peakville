@@ -64,7 +64,7 @@ async function createAnnouncement(channel_id, title, message, schedule_value, da
         VALUES (?, ?, ?, ?, ?, ?)
     `;
     
-    const [result] = await db.execute(query, [channel_id, title, message, schedule_value, days_value, color]);
+    const [result] = await db.pool.execute(query, [channel_id, title, message, schedule_value, days_value, color]);
     return result;
    
 }
@@ -72,40 +72,40 @@ async function createAnnouncement(channel_id, title, message, schedule_value, da
 
 async function getActiveAnnouncements() {
     const query = `SELECT * FROM announcements WHERE active = TRUE`;
-    const [rows] = await db.execute(query);
+    const [rows] = await db.pool.execute(query);
     return rows;
 }
 
 async function getAllAnnouncements() {
     const query = `SELECT * FROM announcements`;
-    const [rows] = await db.execute(query);
+    const [rows] = await db.pool.execute(query);
     return rows;
 }
 
 async function getPausedAnnouncements() {
     const query = `SELECT * FROM announcements WHERE active = FALSE`;
-    const [rows] = await db.execute(query);
+    const [rows] = await db.pool.execute(query);
     return rows;
 }
 
 
 async function deleteAnnouncement(id) {
     const query = `DELETE FROM announcements WHERE id = ?`;
-    const [result] = await db.execute(query, [id]);
+    const [result] = await db.pool.execute(query, [id]);
     return result;
 }
 
 async function pauseAnnouncement(id) {
     const query = `UPDATE announcements SET active = FALSE WHERE id = ?`;
-    const [result] = await db.execute(query, [id]);
+    const [result] = await db.pool.execute(query, [id]);
     return result;
 }
 
 async function reactivateAnnouncement(id) {
     const query = `UPDATE announcements SET active = TRUE WHERE id = ?`;
     const query2 = `SELECT * FROM announcements WHERE id = ?`;
-    await db.execute(query, [id]);
-    const [result] = await db.execute(query2, [id]);
+    await db.pool.execute(query, [id]);
+    const [result] = await db.pool.execute(query2, [id]);
     return result;
 }
 

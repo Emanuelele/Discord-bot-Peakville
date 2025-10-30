@@ -65,7 +65,7 @@ async function getApprovedBackground(client, discordId) {
  * @returns {Object|null} Record esistente o null se non trovato
  */
 async function findExistingAllowlistRecord(discordId) {
-    const [results] = await db.query(
+    const [results] = await db.pool.query(
         'SELECT * FROM allowlist WHERE discord_id = ?',
         [discordId]
     );
@@ -79,7 +79,7 @@ async function findExistingAllowlistRecord(discordId) {
  */
 
 async function createAllowlistRecord(discordId, executor) {
-    await db.execute(
+    await db.pool.execute(
         'INSERT INTO allowlist (discord_id, executor) VALUES (?, ?)',
         [discordId, executor]
     );
@@ -91,7 +91,7 @@ async function createAllowlistRecord(discordId, executor) {
  * @param {string} discordId - ID Discord
  */
 async function updateMemberRoles(interaction, discordId) {
-    const removeRoles = [process.env.REMAND_ROLE_1, process.env.REMAND_ROLE_2, process.env.REMAND_ROLE_3, process.env.BG_APPROVED_ROLE];
+    const removeRoles = [process.env.REMAND_ROLE, process.env.BG_DENIDED_ROLE, process.env.BG_APPROVED_ROLE];
     const allowlistRole = process.env.ALLOWLIST_ROLE;
 
     const member = await interaction.guild.members.fetch(discordId);

@@ -8,4 +8,14 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE,
 });
 
-module.exports = pool;
+const pool2 = mysql.createPool({
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: 'peakville_evento',
+});
+
+module.exports = {
+    pool,
+    pool2
+};
