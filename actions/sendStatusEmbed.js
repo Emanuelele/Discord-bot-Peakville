@@ -6,7 +6,6 @@ async function sendFivemServerStatusMessage(client) {
     const channel = client.channels.cache.get(process.env.STATUS_CHANNEL_ID);
 
     if (!channel) {
-        console.error('Canale non trovato');
         return;
     }
 

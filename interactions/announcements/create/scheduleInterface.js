@@ -3,7 +3,7 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, M
 module.exports = {
     name: 'scheduleInterface',
     async execute(interaction, client) {
-        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+        //await interaction.deferReply({ flags: MessageFlags.Ephemeral });
         const daysOfWeek = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 
         const generateDayMenu = () => {

@@ -7,6 +7,15 @@ const activeJobs = [];
 async function executeAnnouncement(client, announcement) {
     const channel = client.channels.cache.get(announcement.channel_id);
     if (!channel) return console.error(`Canale non trovato: ${announcement.channel_id}`);
+    
+    const recentMessages = await channel.messages.fetch({ limit: 5 });
+    const isDuplicate = recentMessages.some(msg => 
+        msg.embeds.length > 0 && 
+        msg.embeds[0].title === announcement.title
+    );
+    
+    if (isDuplicate) return;
+    
     const embed = new EmbedBuilder()
         .setTitle(announcement.title)
         .setColor(announcement.color)

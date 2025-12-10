@@ -18,7 +18,8 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setColor(0xf9f4d8)
                 .setTitle('Tickets')
-                .setDescription('Clicca su uno dei pulsanti qui sotto per aprire un ticket e ricevere supporto.')
+                //Spiega che se apri il ticket con il topic sbagliato ricevi provvedimenti//
+                .setDescription(`Clicca su uno dei pulsanti qui sotto per aprire un ticket e ricevere supporto. Assicurati di scegliere il tipo di ticket corretto per evitare provvedimenti da parte dello staff. Se ciò che cerchi non è elencato, seleziona "Generale" o chiedi aiuto nel canale <#${process.env.HELP_CHANNEL_ID}>.`)
                 .setThumbnail('https://cdn.peakville.it/static/general/LogoOverlay.webp')
                 .setTimestamp()
                 .setFooter({ text: 'Staff di Peakville', iconURL: 'https://cdn.peakville.it/static/general/logo.png' });
@@ -37,23 +38,16 @@ module.exports = {
                     .setLabel('Permadeath')
                     .setStyle(ButtonStyle.Danger),
                 new ButtonBuilder()
-                    .setCustomId('purchase_ticket')
-                    .setLabel('Donazioni')
+                    .setCustomId('nowl_ticket')
+                    .setLabel('Shop')
                     .setStyle(ButtonStyle.Success),
                 new ButtonBuilder()
                     .setCustomId('activity_ticket')
-                    .setLabel('Attività')
+                    .setLabel('Fazioni')
                     .setStyle(ButtonStyle.Primary)
             );
 
-            const row2 = new ActionRowBuilder().addComponents(
-                new ButtonBuilder()
-                    .setCustomId('nowl_ticket')
-                    .setLabel('Donazioni (NoWl)')
-                    .setStyle(ButtonStyle.Danger)
-            );
-
-            await channel.send({ embeds: [embed], components: [row1, row2] });
+            await channel.send({ embeds: [embed], components: [row1] });
             logger.success(`Messaggio inviato con successo nel canale ${channel.name}.`);
         } catch (error) {
             logger.error(`Errore durante l'invio del messaggio: ${error}`);

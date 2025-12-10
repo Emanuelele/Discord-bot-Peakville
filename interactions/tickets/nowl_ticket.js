@@ -11,12 +11,6 @@ module.exports = {
         const member = interaction.member;
         const category = guild.channels.cache.get(categoryId);
         try {
-            if (member.roles.cache.has(process.env.ALLOWLIST_ROLE)) {
-                return interaction.editReply({
-                    content: `Non hai i permessi per aprire questo tipo di ticket.`,
-                    flags: MessageFlags.Ephemeral
-                });
-            }
             const alreadyHasTicket = await hasOpenTicket(member.id);
             if (alreadyHasTicket >= 1) {
                 return interaction.editReply({
@@ -25,7 +19,7 @@ module.exports = {
                 });
             }
             const channel = await guild.channels.create({
-                name: `Ticket-NoWl-${interaction.user.username}`,
+                name: `Ticket-Shop-${interaction.user.username}`,
                 type: ChannelType.GuildText,
                 topic: member.id,
                 parent: categoryId,
@@ -62,6 +56,16 @@ module.exports = {
 
             const actionRow = new ActionRowBuilder().addComponents(closeButton);
             await channel.send({ embeds: [embed], components: [actionRow] });
+            await channel.send(`Ciao ${member}, grazie per aver scelto di **sostenere il progetto!** Per riscattare le ricompense sul [sito](https://shop.peakville.it) sarà necessario ottenere dei **PeakPoints** <:PeakPoints:1446933990882672710>.
+Se hai deciso di ottenerne tramite donazione, i pacchetti di <:PeakPoints:1446933990882672710> attualmente disponibili sono:
+- 5€ ⟶ 500 <:PeakPoints:1446933990882672710>  
+- 15€ ⟶ 1500 <:PeakPoints:1446933990882672710> + 200 BONUS
+- 50€ ⟶ 5000 <:PeakPoints:1446933990882672710> + 1000 BONUS
+
+Sarà possibile acquistare più pacchetti contemporaneamente, basterà scriverlo nella richiesta di questo ticket!
+Per convertire il saldo in PeakPoints, basterà inviare la somma desiderata al seguente [PayPal](https://www.paypal.com/paypalme/peakville1970), come amici e familiari, ed inviare uno screenshot della ricevuta nella seguente chat testuale come conferma.
+
+*Qualsiasi donazione di somma diversa da quanto riportato, sarà considerata come donazione libera, non convertibile in PeakPoints. Non sarà possibile effettuare rimborsi, pensaci bene! Grazie da parte di tutto lo Staff!* <:peakheart:1369719184321413230>`);
             await createTicket(member.id);
             await interaction.editReply({
                 content: `Il tuo ticket è stato creato: ${channel.toString()}`,

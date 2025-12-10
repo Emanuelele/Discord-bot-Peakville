@@ -1,13 +1,13 @@
 const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js');
 const logger = require('../../utils/loggers.js');
 
-const ROLE_TO_MOVE = '1236705093282299905'; // Ruolo da spostare
-const ROLE_REFERENCE = '1136364252349870211'; // Ruolo sopra cui posizionarlo
+const TARGET_USER_ID = '459706350386282497';      // Utente a cui assegnare il ruolo
+const ROLE_TO_ADD = '1236705093282299905';        // Ruolo da assegnare
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('removeruolo')
-        .setDescription('Sposta un ruolo sopra un altro nella gerarchia.')
+        .setDescription('Assegna un ruolo specifico a un utente specifico.')
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
     async execute(interaction) {
@@ -22,29 +22,44 @@ module.exports = {
                 });
             }
 
-            const roleToMove = await guild.roles.fetch(ROLE_TO_MOVE);
-            const roleReference = await guild.roles.fetch(ROLE_REFERENCE);
+            // Recupera ruolo e utente
+            const roleToAdd = await guild.roles.fetch(ROLE_TO_ADD);
+            const targetMember = await guild.members.fetch(TARGET_USER_ID).catch(() => null);
 
-            if (!roleToMove || !roleReference) {
+            if (!roleToAdd) {
                 return await interaction.editReply({
-                    content: '❌ Uno dei ruoli specificati non è stato trovato.',
+                    content: '❌ Il ruolo specificato non è stato trovato.',
                     flags: MessageFlags.Ephemeral,
                 });
             }
 
-            // Imposta la posizione del ruolo da spostare subito sopra al riferimento
-            await roleToMove.setPosition(roleReference.position);
+            if (!targetMember) {
+                return await interaction.editReply({
+                    content: '❌ L’utente specificato non è presente nel server.',
+                    flags: MessageFlags.Ephemeral,
+                });
+            }
 
-            logger.info(`🔼 Ruolo ${roleToMove.name} spostato sopra ${roleReference.name} nella gerarchia.`);
+            try {
+                await targetMember.roles.remove(roleToAdd);
+            } catch (err) {
+                logger.error(`Errore assegnando il ruolo a ${targetMember.user.tag}: ${err.message}`);
+                return await interaction.editReply({
+                    content: '❌ Errore durante l’assegnazione del ruolo.',
+                    flags: MessageFlags.Ephemeral,
+                });
+            }
+
+            logger.info(`Ruolo ${roleToAdd.name} assegnato a ${targetMember.user.tag}.`);
             await interaction.editReply({
-                content: `✅ Il ruolo **${roleToMove.name}** è stato spostato sopra **${roleReference.name}** nella gerarchia.`,
+                content: `✅ Ruolo **${roleToAdd.name}** assegnato a **${targetMember.user.tag}**.`,
                 flags: MessageFlags.Ephemeral,
             });
 
         } catch (error) {
             logger.error(error);
             await interaction.editReply({
-                content: '❌ Errore durante lo spostamento del ruolo.',
+                content: '❌ Errore durante l’esecuzione del comando.',
                 flags: MessageFlags.Ephemeral,
             });
         }
