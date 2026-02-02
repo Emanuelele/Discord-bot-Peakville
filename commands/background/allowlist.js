@@ -90,11 +90,6 @@ async function createAllowlistRecord(discordId, executor) {
         'INSERT INTO allowlist (discord_id, executor) VALUES (?, ?)',
         [discordId, executor]
     );
-
-    await db.pool2.execute(
-        'INSERT INTO allowlist (discord_id, executor) VALUES (?, ?)',
-        [discordId, executor]
-    );
 }
 
 /**

@@ -32,6 +32,11 @@ module.exports = {
                 content: `Sono stati aggiunti ${amount} token a ${user.tag}.`,
                 flags: MessageFlags.Ephemeral,
             });
+
+            const channel = await interaction.client.channels.fetch('1448995305906241568');
+            if (channel) {
+                channel.send(`Sono stati aggiunti ${amount} token a ${user} da ${interaction.user}.`);
+            }
         } catch (error) {
             console.error('Errore durante l\'aggiunta dei token:', error);
             await interaction.editReply({

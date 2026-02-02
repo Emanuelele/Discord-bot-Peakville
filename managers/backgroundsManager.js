@@ -183,7 +183,34 @@ async function wipeAllBackgroundsForUser(discord_id) {
     }
 }
 
+async function resetCooldownToLatestBackground(discord_id) {
+    try {
+        const [rows] = await db.pool.query(
+            `SELECT id FROM backgrounds 
+             WHERE discord_id = ? 
+             AND type = 'denied'
+             ORDER BY created_at DESC 
+             LIMIT 1`,
+            [discord_id]
+        );
 
+        if (rows.length === 0) {
+            return false;
+        }
+
+        const background = rows[0];
+
+        await db.pool.query(
+            `UPDATE backgrounds SET cooldown = NOW() WHERE id = ?`,
+            [background.id]
+        );
+
+        return true;
+    } catch (error) {
+        logger.error(`Errore durante il reset del cooldown: ${error.message}`);
+        throw new Error('Errore durante il reset del cooldown.');
+    }
+}
 
 module.exports = {
     checkBackgroundRecord,
@@ -196,5 +223,6 @@ module.exports = {
     getLinksByDiscordId,
     assignPriorityToLatestNewBackground,
     giveNewTry,
-    wipeAllBackgroundsForUser
+    wipeAllBackgroundsForUser,
+    resetCooldownToLatestBackground
 }

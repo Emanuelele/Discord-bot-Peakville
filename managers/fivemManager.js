@@ -9,20 +9,20 @@ async function wsAdd(discord_id, grade) {
         ON DUPLICATE KEY UPDATE grade = VALUES(grade)
     `;
     
-    const result = await db.pool2.execute(query, [discord_id, grade]);
+    const result = await db.pool.execute(query, [discord_id, grade]);
     return result ? true : false;
 }
 
 async function wsRemove(discord_id) {
     const query = ` DELETE FROM ws_users WHERE id = ?`;
     
-    const result = await db.pool2.execute(query, [discord_id]);
+    const result = await db.pool.execute(query, [discord_id]);
     return result ? true : false;
 }
 
 async function isUserBanned(discord_id){
     const query = `SELECT * FROM bans WHERE discord_id = ?`;
-    const result = await db.pool2.execute(query, [discord_id]);
+    const result = await db.pool.execute(query, [discord_id]);
     if (result[0] && result[0].length > 0) {
         return true;
     }
@@ -31,7 +31,7 @@ async function isUserBanned(discord_id){
 
 async function unBann(discord_id){
     const query = `DELETE FROM bans WHERE discord_id = ?`;
-    const [result] = await db.pool2.execute(query, [discord_id]);
+    const [result] = await db.pool.execute(query, [discord_id]);
     return result;
 
 }
@@ -41,7 +41,7 @@ async function createLog(category, metadata) {
         INSERT INTO logs (category, metadata, created_at, updated_at)
         VALUES (?, ?, NOW(), NOW())
     `;
-    const [result] = await db.pool2.execute(query, [category, JSON.stringify(metadata)]);
+    const [result] = await db.pool.execute(query, [category, JSON.stringify(metadata)]);
     return result;
 }
 

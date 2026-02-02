@@ -43,6 +43,9 @@ module.exports = {
                     { name: 'Meme', value: 'gif_meme' },
                     { name: 'Movie', value: 'gif_movie' },
                 ))
+        .addBooleanOption(option => 
+            option.setName("ping").setDescription("Tagga tutti")
+        )
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
     
     async execute(interaction) {
@@ -50,7 +53,7 @@ module.exports = {
             await interaction.deferReply({ flags: MessageFlags.Ephemeral })
             const channel = interaction.options.getChannel('channel');
             const title = interaction.options.getString('title');
-            const message = interaction.options.getString('message');
+            const message = interaction.options.getString('message').replace(/\\n/g, '\n');
             const color = interaction.options.getString('color');
 
             const embed = new EmbedBuilder()
@@ -68,7 +71,16 @@ module.exports = {
                 });
             }
 
-            await channel.send({ embeds: [embed] });
+            const ping = interaction.options.getBoolean('ping');
+
+            await channel.send({
+              
+                embeds: [embed],
+                allowedMentions: ping ? { parse: ['everyone'] } : {},
+                content: ping ? '@everyone' : null,
+            });
+
+
 
             await interaction.editReply({ content: 'Annuncio inviato con successo!', flags: MessageFlags.Ephemeral });
         } catch (error) {

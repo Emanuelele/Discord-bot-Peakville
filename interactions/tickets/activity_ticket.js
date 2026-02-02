@@ -19,7 +19,7 @@ module.exports = {
             }
             
             const alreadyHasTicket = await hasOpenTicket(member.id);
-            if (alreadyHasTicket >= 1) {
+            if (alreadyHasTicket >= process.env.MAX_TICKETS) {
                 return interaction.editReply({
                     content: `Hai già ${alreadyHasTicket} ticket aperti!`,
                     flags: MessageFlags.Ephemeral,
@@ -78,7 +78,6 @@ Per essere riconosciuti ufficialmente come **banda criminale**, è necessario fo
 
 :three: **Divisione dei ruoli**  
    Indicare chi ricopre quale ruolo all’interno della banda. Ad esempio:
-
    - Presidente
    - Vice Presidente
    - Sergente in Armi
