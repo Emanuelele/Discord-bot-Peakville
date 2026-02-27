@@ -1,38 +1,23 @@
 const logger = require('../utils/loggers.js');
 const dynamicChannels = new Map();
+const channelConfig = require('../config/dynamicChannels.json');
 require('dotenv').config();
 
-function getChannelConfig() {
-    const config = [];
-    let i = 1;
-    
-    while (process.env[`DYNAMIC_CHANNEL_${i}_ID`]) {
-        config.push({
-            channelId: process.env[`DYNAMIC_CHANNEL_${i}_ID`],
-            name: process.env[`DYNAMIC_CHANNEL_${i}_NAME`]
-        });
-        i++;
-    }
-    
-    return config;
-}
-
 async function rebuildDynamicChannelsMap(guild) {
-    const config = getChannelConfig();
-    const mainChannelIds = config.map(c => c.channelId);
-    
+    const mainChannelIds = channelConfig.map(c => c.channelId);
+
     for (const [id, channel] of guild.channels.cache) {
         if (channel.type === 2 && channel.parent) {
             const parentChannels = guild.channels.cache.filter(
                 ch => mainChannelIds.includes(ch.id) && ch.parent?.id === channel.parent.id
             );
-            
+
             if (parentChannels.size > 0) {
-                const matchingConfig = config.find(c => 
-                    channel.name.startsWith(c.name.split('・')[0]) || 
+                const matchingConfig = channelConfig.find(c =>
+                    channel.name.startsWith(c.name.split('・')[0]) ||
                     channel.name.startsWith(c.name.split('︱')[0])
                 );
-                
+
                 if (matchingConfig && !mainChannelIds.includes(id)) {
                     dynamicChannels.set(id, channel);
                 }
@@ -44,8 +29,6 @@ async function rebuildDynamicChannelsMap(guild) {
 module.exports = {
     name: 'voiceStateUpdate',
     async execute(oldState, newState, client) {
-        const channelConfig = getChannelConfig();
-        
         try {
             if (newState.guild && dynamicChannels.size === 0) {
                 await rebuildDynamicChannelsMap(newState.guild);
@@ -79,15 +62,15 @@ module.exports = {
 
             for (const [channelId] of dynamicChannels.entries()) {
                 const voiceChannel = oldState.guild.channels.cache.get(channelId);
-                
+
                 if (!voiceChannel) {
                     dynamicChannels.delete(channelId);
                     continue;
                 }
-                
+
                 setTimeout(async () => {
                     const currentChannel = oldState.guild.channels.cache.get(channelId);
-                    
+
                     if (currentChannel && currentChannel.members.size === 0) {
                         try {
                             await currentChannel.delete();
@@ -103,7 +86,7 @@ module.exports = {
                     }
                 }, 500);
             }
-        } catch(error) {
+        } catch (error) {
             logger.error(`Errore durante il controllo del canale dinamico: ${error}`);
         }
     },

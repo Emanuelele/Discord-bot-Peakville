@@ -5,9 +5,15 @@ async function createTicket(creator_id) {
     return await db.pool.execute(query, [creator_id]);
 }
 
-async function transcriptTicket(creator_id, closer_id, transcript) {
-    const query = `UPDATE tickets SET closer_id = ?, transcript = ? WHERE creator_id = ?`;
-    return await db.pool.execute(query, [closer_id, transcript, creator_id]);
+async function transcriptTicket(id, closer_id, transcript) {
+    const query = `UPDATE tickets SET closer_id = ?, transcript = ? WHERE id = ?`;
+    return await db.pool.execute(query, [closer_id, transcript, id]);
+}
+
+async function getOpenTicketByCreatorId(creator_id) {
+    const query = `SELECT * FROM tickets WHERE creator_id = ? AND closer_id IS NULL ORDER BY created_at DESC LIMIT 1`;
+    const [result] = await db.pool.execute(query, [creator_id]);
+    return result[0];
 }
 
 async function getTicketbyCreatorId(creator_id) {
@@ -33,6 +39,7 @@ async function hasOpenTicket(userId) {
 module.exports = {
     createTicket,
     transcriptTicket,
+    getOpenTicketByCreatorId,
     getTicketbyCreatorId,
     getTicketbyId,
     hasOpenTicket

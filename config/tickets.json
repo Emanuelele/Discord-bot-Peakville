@@ -1,0 +1,99 @@
+{
+    "panel": {
+        "channelId": "1209632745689587742",
+        "embed": {
+            "color": "#f9f4d8",
+            "title": "Tickets",
+            "description": "Clicca sul pulsante qui sotto per aprire un ticket e ricevere supporto. Assicurati di scegliere il tipo di ticket corretto per evitare provvedimenti da parte dello staff. Se ciò che cerchi non è elencato, seleziona \"Generale\" o chiedi aiuto nel canale <#1370503609741217913>.",
+            "thumbnail": "https://cdn.peakville.it/static/general/LogoOverlay.webp",
+            "footer": {
+                "text": "Staff di Peakville",
+                "iconURL": "https://cdn.peakville.it/static/general/logo.png"
+            }
+        },
+        "button": {
+            "label": "Apri Ticket",
+            "emoji": "🎫",
+            "style": "Primary",
+            "customId": "open_ticket_menu"
+        }
+    },
+    "staffRoleId": "1136364640406864002",
+    "selectMenu": {
+        "customId": "create_ticket_select",
+        "placeholder": "Seleziona il tipo di ticket...",
+        "options": [
+            {
+                "label": "Generale",
+                "value": "ticket_general",
+                "description": "Domande e problemi generali",
+                "emoji": "💬",
+                "categoryId": "1359582508223562029",
+                "namePrefix": "Ticket-General",
+                "allowedRoles": ["1359570371321528320"],
+                "extraMessage": null
+            },
+            {
+                "label": "Bug",
+                "value": "ticket_bug",
+                "description": "Segnala un bug o malfunzionamento",
+                "emoji": "🐛",
+                "categoryId": "1359582619435536515",
+                "namePrefix": "Ticket-Bug",
+                "allowedRoles": ["1359570371321528320"],
+                "extraMessage": null
+            },
+            {
+                "label": "Permadeath",
+                "value": "ticket_perma",
+                "description": "Richiedi assistenza per permadeath",
+                "emoji": "💀",
+                "categoryId": "1359582543724155233",
+                "namePrefix": "Ticket-Perma",
+                "allowedRoles": ["1359570371321528320"],
+                "extraMessage": "Ciao {member}!\nPer richiedere il **Permadeath** di un personaggio è necessario fornire **clip** e **motivazioni** conformi al regolamento, consultabile sul nostro [sito](https://peakville.it).\n🔹 **Richiesta di wipe volontario**\nSe stai richiedendo un wipe per il *tuo* personaggio, potresti incorrere nell’**attesa canonica** per la valutazione del background.\n🔹 **Altri casi di Permadeath**\nIn tutti gli altri casi (ad esempio, se sei stato permato da un altro giocatore), il nuovo background **avrà automaticamente il saltacoda** ed entrerà in **valutazione prioritaria**.\n❗ **Nota importante**\nIl wipe del proprio personaggio **NON** può avvenire tramite una morte casuale per mano di un altro giocatore, ma deve essere **preventivamente accordato con lo staff** prima di essere eseguito.\n📎 **Invio background**\nSe sei stato permato da un altro giocatore, puoi inoltrare il **link del nuovo background** direttamente in questo ticket, così da agevolare la valutazione ed eventuali correzioni."
+            },
+            {
+                "label": "Shop / Donazione",
+                "value": "ticket_shop",
+                "description": "Assistenza per lo shop o donazioni",
+                "emoji": "🛒",
+                "categoryId": "1395951205695492146",
+                "namePrefix": "Ticket-Shop",
+                "allowedRoles": [],
+                "extraMessage": "Ciao {member}, grazie per aver scelto di **sostenere il progetto!** Per riscattare le ricompense sul [sito](https://shop.peakville.it) sarà necessario ottenere dei **PeakPoints** <:PeakPoints:1446933990882672710>.\nSe hai deciso di ottenerne tramite donazione, i pacchetti di <:PeakPoints:1446933990882672710> attualmente disponibili sono:\n- 5€ ⟶ 500 <:PeakPoints:1446933990882672710>  \n- 15€ ⟶ 1500 <:PeakPoints:1446933990882672710> + 50 BONUS\n- 50€ ⟶ 5000 <:PeakPoints:1446933990882672710> + 250 BONUS\n\nSarà possibile acquistare più pacchetti contemporaneamente, basterà scriverlo nella richiesta di questo ticket!\nPer convertire il saldo in PeakPoints, basterà inviare la somma desiderata al seguente [PayPal](https://www.paypal.com/paypalme/peakville1970), come amici e familiari, ed inviare uno screenshot della ricevuta nella seguente chat testuale come conferma.\n\n*Qualsiasi donazione di somma diversa da quanto riportato, sarà considerata come donazione libera, non convertibile in PeakPoints. Non sarà possibile effettuare rimborsi, pensaci bene! Grazie da parte di tutto lo Staff!* <:peakheart:1369719184321413230>",
+                "suppressEmbeds": true
+            },
+            {
+                "label": "Fazioni",
+                "value": "ticket_activity",
+                "description": "Richiedi la creazione o supporto per una fazione",
+                "emoji": "👥",
+                "categoryId": "1448332254236643358",
+                "namePrefix": "Ticket-Fazioni",
+                "allowedRoles": ["1433442394665255042", "1359570371321528320"],
+                "extraMessage": "Ciao {member}!\n\n*Ricorda che prima di procedere con la creazione della tua banda criminale, è necessario che **tutti **i membri abbiano un background approvato dallo staff.*\n\nPer essere riconosciuti ufficialmente come **banda criminale**, è necessario fornire alcune informazioni fondamentali. Ti invitiamo a compilare quanto segue nel ticket:\n\n:one: **Origine della fazione**  \n   Breve descrizione di come è nata la banda, storia e motivazioni.\n\n:two: **Obiettivi**  \n   Gli obiettivi e gli scopi della banda.\n\n:three: **Divisione dei ruoli**  \n   Indicare chi ricopre quale ruolo all’interno della banda. Ad esempio:\n   - Presidente\n   - Vice Presidente\n   - Sergente in Armi\n   - Segretario\n   - Enforcer\n   - Boia\n   - Prospect\n\n:four: **Modus Operandi**  \n   Come la banda prende decisioni, interazioni tra membri, approccio verso le forze dell’ordine, eventuali regole interne.\n\n:pushpin: **Regole importanti**  \n- Massimo **6 membri** per banda, tutti devono essere presenti nel ticket.  \n- Le alleanze tra bande **non sono consentite**.  \n- Nessun membro della banda può possedere direttamente un’attività, è possibile usare prestanome esterni.  \n- Essere riconosciuti come banda criminale permette al leader di ottenere lo status di **Criminale Affermato**, con strumenti unici in-game.\n\n*Una volta inviati tutti i dettagli, lo staff valuterà la tua richiesta e, se approvata, la banda sarà riconosciuta ufficialmente.*"
+            },
+            {
+                "label": "Vestiti/Tatuaggi custom",
+                "value": "ticket_custom_clothes",
+                "description": "Richiedi la creazione o il caricamento di vestiti o tatuaggi custom",
+                "emoji": "👗",
+                "categoryId": "1476971686413996217",
+                "namePrefix": "Ticket-Vestiti",
+                "allowedRoles": ["1433442394665255042", "1359570371321528320"],
+                "extraMessage": ""
+            },
+            {
+                "label": "Asset custom",
+                "value": "ticket_custom_asset",
+                "description": "Crea asset custom, aggiungi garage alle case e altro. Dai sfogo alle tue idee!",
+                "emoji": "💣",
+                "categoryId": "1476979388020035625",
+                "namePrefix": "Ticket-Asset",
+                "allowedRoles": ["1433442394665255042", "1359570371321528320"],
+                "extraMessage": ""
+            }
+        ]
+    }
+}

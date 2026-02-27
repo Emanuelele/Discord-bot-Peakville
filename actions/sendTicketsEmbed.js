@@ -1,12 +1,12 @@
 const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const logger = require('../utils/loggers.js');
+const ticketConfig = require('../config/tickets.json');
 require('dotenv').config();
 
 module.exports = {
     customId: "sendTicketsEmbed",
     async execute(client) {
-
-        const channel = client.channels.cache.get(process.env.TICKETS_CHANNEL_ID);
+        const channel = client.channels.cache.get(ticketConfig.panel.channelId);
 
         try {
             const messages = await channel.messages.fetch({ limit: 1 });
@@ -16,35 +16,22 @@ module.exports = {
             }
 
             const embed = new EmbedBuilder()
-                .setColor(0xf9f4d8)
-                .setTitle('Tickets')
-                //Spiega che se apri il ticket con il topic sbagliato ricevi provvedimenti//
-                .setDescription(`Clicca su uno dei pulsanti qui sotto per aprire un ticket e ricevere supporto. Assicurati di scegliere il tipo di ticket corretto per evitare provvedimenti da parte dello staff. Se ciò che cerchi non è elencato, seleziona "Generale" o chiedi aiuto nel canale <#${process.env.HELP_CHANNEL_ID}>.`)
-                .setThumbnail('https://cdn.peakville.it/static/general/LogoOverlay.webp')
+                .setColor(ticketConfig.panel.embed.color)
+                .setTitle(ticketConfig.panel.embed.title)
+                .setDescription(ticketConfig.panel.embed.description)
+                .setThumbnail(ticketConfig.panel.embed.thumbnail)
                 .setTimestamp()
-                .setFooter({ text: 'Staff di Peakville', iconURL: 'https://cdn.peakville.it/static/general/logo.png' });
+                .setFooter({
+                    text: ticketConfig.panel.embed.footer.text,
+                    iconURL: ticketConfig.panel.embed.footer.iconURL
+                });
 
             const row1 = new ActionRowBuilder().addComponents(
                 new ButtonBuilder()
-                    .setCustomId('general_ticket')
-                    .setLabel('Generale')
-                    .setStyle(ButtonStyle.Success),
-                new ButtonBuilder()
-                    .setCustomId('bug_ticket')
-                    .setLabel('Bug')
-                    .setStyle(ButtonStyle.Primary),
-                new ButtonBuilder()
-                    .setCustomId('perma_ticket')
-                    .setLabel('Permadeath')
-                    .setStyle(ButtonStyle.Danger),
-                new ButtonBuilder()
-                    .setCustomId('nowl_ticket')
-                    .setLabel('Shop')
-                    .setStyle(ButtonStyle.Success),
-                new ButtonBuilder()
-                    .setCustomId('activity_ticket')
-                    .setLabel('Fazioni')
-                    .setStyle(ButtonStyle.Primary)
+                    .setCustomId(ticketConfig.panel.button.customId)
+                    .setLabel(ticketConfig.panel.button.label)
+                    .setEmoji(ticketConfig.panel.button.emoji)
+                    .setStyle(ButtonStyle[ticketConfig.panel.button.style])
             );
 
             await channel.send({ embeds: [embed], components: [row1] });
