@@ -5,7 +5,7 @@ const { MessageFlags } = require('discord.js');
 module.exports = {
     name: 'confirm_close_ticket',
     async execute(interaction, client) {
-        await interaction.deferReply();
+        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
         const channel = interaction.channel;
         const creatorId = channel.topic;
         const closerId = interaction.user.id;

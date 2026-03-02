@@ -3,7 +3,6 @@ const path = require('path');
 const https = require('https');
 const http = require('http');
 
-// Funzione helper per scaricare file
 async function downloadFile(url, destPath) {
     return new Promise((resolve, reject) => {
         const file = require('fs').createWriteStream(destPath);
@@ -28,7 +27,6 @@ async function downloadFile(url, destPath) {
     });
 }
 
-// Estrae estensione dall'url, fallbacka a defaultExt
 function getExtensionFromUrl(url, defaultExt = '.png') {
     try {
         const parsedUrl = new URL(url);
@@ -40,7 +38,6 @@ function getExtensionFromUrl(url, defaultExt = '.png') {
     }
 }
 
-// Genera il CSS base che simula Discord
 function getDiscordCSS() {
     return `
     <style>
@@ -188,14 +185,12 @@ function getDiscordCSS() {
     `;
 }
 
-// Genera l'HTML e scarica gli assets
 async function generateTranscript(messages, ticketId, channelName) {
     const basePath = path.join('C:', 'cdn', 'static', 'tickets', `ticket_${ticketId}`);
     const assetsPath = path.join(basePath, 'assets');
     const avatarsPath = path.join(assetsPath, 'avatars');
     const attachmentsPath = path.join(assetsPath, 'attachments');
 
-    // Crea le directory necessarie
     await fs.mkdir(basePath, { recursive: true });
     await fs.mkdir(avatarsPath, { recursive: true });
     await fs.mkdir(attachmentsPath, { recursive: true });
@@ -217,40 +212,31 @@ async function generateTranscript(messages, ticketId, channelName) {
         <div class="chat-container">
     `;
 
-    // Ordina i messaggi dal più vecchio al più recente
     const sortedMessages = [...messages.values()].sort((a, b) => a.createdTimestamp - b.createdTimestamp);
-
-    // Cache per gli avatar già scaricati in questo ticket
     const downloadedAvatars = new Set();
 
     for (const msg of sortedMessages) {
-        // Scarica avatar
         let avatarUrl = msg.author.displayAvatarURL({ extension: 'png', size: 128 });
         let avatarFilename = `${msg.author.id}.png`;
         let localAvatarUrl = `https://cdn.peakville.it/static/tickets/ticket_${ticketId}/assets/avatars/${avatarFilename}`;
 
         if (!downloadedAvatars.has(msg.author.id) && avatarUrl) {
             try {
-                // Discord restituisce webp di default se non specificato png. Forziamo png nelle API discord.js
                 const avatarDest = path.join(avatarsPath, avatarFilename);
                 await downloadFile(avatarUrl, avatarDest);
                 downloadedAvatars.add(msg.author.id);
             } catch (err) {
                 console.error(`Impossibile scaricare avatar per ${msg.author.tag}:`, err);
-                localAvatarUrl = avatarUrl; // fallback all'url online se fallisce
+                localAvatarUrl = avatarUrl;
             }
         }
 
-        // Parsing contenuto messaggio per sostituire eventuali link a discord cdn con link locali
-        // Note: I link normali inviati in chat come testo non li scarichiamo (sarebbe complesso parsare l'html), 
-        // l'utente preme i link normalmente. Scarichiamo solo gli *allegati* reali caricati su Discord.
         let contentHtml = msg.content
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
             .replace(/>/g, "&gt;")
             .replace(/\n/g, "<br>");
 
-        // Renderizza attachments
         let attachmentsHtml = '';
         for (const [id, attachment] of msg.attachments) {
             const ext = getExtensionFromUrl(attachment.url, attachment.name ? path.extname(attachment.name) : '.bin');
@@ -262,7 +248,6 @@ async function generateTranscript(messages, ticketId, channelName) {
             try {
                 await downloadFile(attachment.url, targetPath);
 
-                // Genera HTML in base al tipo di file
                 if (attachment.contentType && attachment.contentType.startsWith('image/')) {
                     attachmentsHtml += `<div class="attachment"><img src="${localUrl}" alt="${safeName}"></div>`;
                 } else if (attachment.contentType && attachment.contentType.startsWith('video/')) {
@@ -283,13 +268,11 @@ async function generateTranscript(messages, ticketId, channelName) {
             }
         }
 
-        // Renderizza Embeds generati da bot
         let embedsHtml = '';
         for (const embed of msg.embeds) {
             embedsHtml += `<div class="embed">`;
             if (embed.title) embedsHtml += `<div class="embed-title">${embed.title}</div>`;
             if (embed.description) embedsHtml += `<div class="embed-description">${embed.description.replace(/\n/g, '<br>')}</div>`;
-            // Per ora non scarichiamo le immagini interne agli embed bot (come il logo), si mantengono online.
             embedsHtml += `</div>`;
         }
 
@@ -315,11 +298,9 @@ async function generateTranscript(messages, ticketId, channelName) {
     </html>
     `;
 
-    // Salva il file index.html
     const indexPath = path.join(basePath, 'index.html');
     await fs.writeFile(indexPath, html, 'utf8');
 
-    // Ritorna l'URL pubblico della CDN
     return `https://cdn.peakville.it/static/tickets/ticket_${ticketId}`;
 }
 

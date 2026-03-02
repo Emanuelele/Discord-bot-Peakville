@@ -20,12 +20,14 @@ module.exports = {
             const user = interaction.options.getUser('user');
             const tickets = await getTicketbyCreatorId(user.id);
             if (tickets.length === 0) {
-                return interaction.editReply({content: `Non ci sono ticket aperti da ${user.tag}.`,flags: MessageFlags.Ephemeral,});
+                return interaction.editReply({ content: `Non ci sono ticket aperti da ${user.tag}.`, flags: MessageFlags.Ephemeral, });
             }
 
-            const options = tickets.map(ticket => ({
-                label: `Ticket #${ticket.id} - ${new Date(ticket.created_at).toLocaleString()}`,
-                value: ticket.id.toLocaleString(),
+            const recentTickets = tickets.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 25);
+
+            const options = recentTickets.map(ticket => ({
+                label: `Ticket #${ticket.id} - ${new Date(ticket.created_at).toLocaleString('it-IT')}`,
+                value: ticket.id.toString(),
             }));
 
             const selectMenu = new StringSelectMenuBuilder()
@@ -42,8 +44,9 @@ module.exports = {
             });
         } catch (error) {
             logger.error(`Errore durante la gestione dell\'interazione in ticket get: ${error}`);
+            console.log(error.stack);
             return interaction.editReply({
-                content: 'Si è verificato un errore durante l\'esecuzione del comando',
+                content: 'Si è verificato un errore durante l\'esecuzione del comando' + error,
                 flags: MessageFlags.Ephemeral,
             });
         }

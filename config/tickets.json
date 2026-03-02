@@ -1,4 +1,5 @@
 {
+    "maxTickets": 5,
     "panel": {
         "channelId": "1209632745689587742",
         "embed": {

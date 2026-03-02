@@ -1,7 +1,6 @@
 const logger = require('../utils/loggers.js');
 const dynamicChannels = new Map();
 const channelConfig = require('../config/dynamicChannels.json');
-require('dotenv').config();
 
 async function rebuildDynamicChannelsMap(guild) {
     const mainChannelIds = channelConfig.map(c => c.channelId);

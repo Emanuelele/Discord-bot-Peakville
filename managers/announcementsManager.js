@@ -7,15 +7,15 @@ const activeJobs = [];
 async function executeAnnouncement(client, announcement) {
     const channel = client.channels.cache.get(announcement.channel_id);
     if (!channel) return console.error(`Canale non trovato: ${announcement.channel_id}`);
-    
+
     const recentMessages = await channel.messages.fetch({ limit: 5 });
-    const isDuplicate = recentMessages.some(msg => 
-        msg.embeds.length > 0 && 
+    const isDuplicate = recentMessages.some(msg =>
+        msg.embeds.length > 0 &&
         msg.embeds[0].title === announcement.title
     );
-    
+
     if (isDuplicate) return;
-    
+
     const embed = new EmbedBuilder()
         .setTitle(announcement.title)
         .setColor(announcement.color)
@@ -53,7 +53,7 @@ function stopAnnouncementJob() {
     });
 }
 
-function reactiveAnnouncementJob(client, announcement){
+function reactiveAnnouncementJob(client, announcement) {
     try {
         const cronExpression = `0 ${announcement.schedule_value} ${announcement.days_value}`;
         const job = new CronJob(cronExpression, () => {
@@ -66,18 +66,14 @@ function reactiveAnnouncementJob(client, announcement){
     }
 }
 
-
 async function createAnnouncement(channel_id, title, message, schedule_value, days_value, color) {
     const query = `
         INSERT INTO announcements (channel_id, title, message, schedule_value, days_value, color)
         VALUES (?, ?, ?, ?, ?, ?)
     `;
-    
     const [result] = await db.pool.execute(query, [channel_id, title, message, schedule_value, days_value, color]);
     return result;
-   
 }
-
 
 async function getActiveAnnouncements() {
     const query = `SELECT * FROM announcements WHERE active = TRUE`;
@@ -96,7 +92,6 @@ async function getPausedAnnouncements() {
     const [rows] = await db.pool.execute(query);
     return rows;
 }
-
 
 async function deleteAnnouncement(id) {
     const query = `DELETE FROM announcements WHERE id = ?`;
@@ -118,10 +113,11 @@ async function reactivateAnnouncement(id) {
     return result;
 }
 
-module.exports = { startAnnouncementJobs,
-    executeAnnouncement, 
-    stopAnnouncementJob, 
-    reactiveAnnouncementJob, 
+module.exports = {
+    startAnnouncementJobs,
+    executeAnnouncement,
+    stopAnnouncementJob,
+    reactiveAnnouncementJob,
     createAnnouncement,
     getActiveAnnouncements,
     deleteAnnouncement,

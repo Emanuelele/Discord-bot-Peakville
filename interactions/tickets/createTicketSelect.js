@@ -1,12 +1,10 @@
 const { ChannelType, PermissionFlagsBits, EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, MessageFlags } = require('discord.js');
 const { createTicket, hasOpenTicket } = require('../../managers/ticketsManager');
 const ticketConfig = require('../../config/tickets.json');
-require('dotenv').config();
 
 module.exports = {
     name: ticketConfig.selectMenu.customId,
     async execute(interaction, client) {
-        // Rimuoviamo il menu a tendina per evitare spam
         await interaction.update({
             content: 'Creazione del ticket in corso...',
             components: []
@@ -42,7 +40,7 @@ module.exports = {
             }
 
             const alreadyHasTicket = await hasOpenTicket(member.id);
-            if (alreadyHasTicket >= process.env.MAX_TICKETS) {
+            if (alreadyHasTicket >= ticketConfig.maxTickets) {
                 return interaction.followUp({
                     content: `Hai già ${alreadyHasTicket} ticket aperti!`,
                     flags: MessageFlags.Ephemeral,

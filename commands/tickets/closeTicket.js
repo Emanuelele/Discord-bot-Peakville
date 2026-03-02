@@ -1,8 +1,11 @@
-const { ButtonBuilder, ButtonStyle, ActionRowBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ButtonBuilder, ButtonStyle, ActionRowBuilder, MessageFlags } = require('discord.js');
 const ticketConfig = require('../../config/tickets.json');
 
 module.exports = {
-    name: 'close_ticket',
+    data: new SlashCommandBuilder()
+        .setName('ticket-close')
+        .setDescription('Chiudi il ticket corrente'),
+
     async execute(interaction, client) {
         await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
@@ -17,7 +20,6 @@ module.exports = {
         }
 
         const channel = interaction.channel;
-        const creatorId = channel.topic;
 
         const confirmButton = new ButtonBuilder()
             .setCustomId('confirm_close_ticket')
@@ -27,9 +29,9 @@ module.exports = {
         const actionRow = new ActionRowBuilder().addComponents(confirmButton);
 
         await interaction.editReply({
-            content: 'Sei sicuro di voler chiudere il ticket?',
+            content: 'Sei sicuro di voler chiudere il ticket? (Verrà generato il transcript)',
             components: [actionRow],
             flags: MessageFlags.Ephemeral,
         });
-    }
-}
+    },
+};

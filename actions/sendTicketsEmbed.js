@@ -1,7 +1,6 @@
 const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const logger = require('../utils/loggers.js');
 const ticketConfig = require('../config/tickets.json');
-require('dotenv').config();
 
 module.exports = {
     customId: "sendTicketsEmbed",
@@ -10,10 +9,7 @@ module.exports = {
 
         try {
             const messages = await channel.messages.fetch({ limit: 1 });
-            if (messages.size > 0) {
-                logger.warn(`C'è già un messaggio nel canale ${channel.name}.`);
-                return;
-            }
+            if (messages.size > 0) return;
 
             const embed = new EmbedBuilder()
                 .setColor(ticketConfig.panel.embed.color)

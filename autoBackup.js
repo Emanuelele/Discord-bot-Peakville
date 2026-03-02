@@ -81,7 +81,7 @@ function manageBackupFiles() {
         }
 
         const backupFiles = files
-            .filter(file => file.endsWith('.gz') || file.endsWith('.zip')) // Gestisce sia i file .gz che .zip
+            .filter(file => file.endsWith('.gz') || file.endsWith('.zip'))
             .map(file => ({
                 file,
                 time: fs.statSync(path.join(backupDir, file)).mtime.getTime()
